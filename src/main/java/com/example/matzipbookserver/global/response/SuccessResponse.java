@@ -3,9 +3,9 @@ package com.example.matzipbookserver.global.response;
 import com.example.matzipbookserver.global.response.success.SuccessCode;
 import org.springframework.http.ResponseEntity;
 
-public class SuccessResponse<T> extends ResponseEntity {
+public class SuccessResponse<T> extends ResponseEntity<CustomResponseDto<T>> {
     public SuccessResponse(final SuccessCode successCode, final T result) {
-        super(new CustomResponseDto<>(successCode.getCode(), result),
+        super(new CustomResponseDto<>(successCode.getCode(), successCode.getMessage(), result),
                 successCode.getHttpStatus()
         );
     }
