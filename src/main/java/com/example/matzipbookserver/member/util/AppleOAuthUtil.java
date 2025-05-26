@@ -39,8 +39,8 @@ public class AppleOAuthUtil {
     @Value("${apple.key-id}")
     private String keyId;
 
-    @Value("${apple.key-path}")
-    private Resource keyFile;
+    @Value("${apple.private-key}")
+    private String privateKeyPem;
 
     @Value("${apple.redirect-uri}")
     private String redirectUri;
@@ -98,7 +98,7 @@ public class AppleOAuthUtil {
 
     private PrivateKey getPrivateKey() {
         try {
-            String keyContent = new String(keyFile.getInputStream().readAllBytes(), StandardCharsets.UTF_8)
+            String keyContent = privateKeyPem
                     .replace("-----BEGIN PRIVATE KEY-----", "")
                     .replace("-----END PRIVATE KEY-----", "")
                     .replaceAll("\\s", "");
