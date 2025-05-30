@@ -14,6 +14,13 @@ java {
     }
 }
 
+configurations {
+    asciidoctorExt
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
 repositories {
     mavenCentral()
 }
@@ -25,27 +32,37 @@ ext {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    // Spring TEST
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'    
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    
+    //Feign
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+
+    // Spring REST Docs
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+    // Spring JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-    //lombok
+    // LOMBOK
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    //mysql
+    // MYSQL & H2
     runtimeOnly 'com.mysql:mysql-connector-j'
-    //Feign
-    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+    testImplementation 'com.h2database:h2'
 }
 
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
-}
+ }
 
 tasks.named('test') {
     outputs.dir snippetsDir
@@ -55,4 +72,14 @@ tasks.named('test') {
 tasks.named('asciidoctor') {
     inputs.dir snippetsDir
     dependsOn test
+}
+
+asciidoctor {
+    inputs.dir snippetsDir
+    dependsOn test
+
+    attributes 'snippets': snippetsDir
+
+    sourceDir = file('src/docs/asciidoc')
+    outputDir = file('build/docs/asciidoc')
 }
