@@ -27,6 +27,7 @@ repositories {
 
 ext {
     set('snippetsDir', file("build/generated-snippets"))
+    set('springCloudVersion', "2023.0.3")
 }
 
 dependencies {
@@ -35,8 +36,11 @@ dependencies {
 
     // Spring TEST
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'    
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    
+    //Feign
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 
     // Spring REST Docs
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
@@ -53,6 +57,12 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     testImplementation 'com.h2database:h2'
 }
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+ }
 
 tasks.named('test') {
     outputs.dir snippetsDir
