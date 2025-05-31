@@ -4,7 +4,9 @@ import org.springframework.http.HttpStatus;
 
 public enum MemberSuccessCode implements SuccessCode {
     LOGIN_SUCCESS(HttpStatus.OK,"MEMBER-001","로그인 성공"),
-    SIGNUP_REQUIRED(HttpStatus.OK, "MEMBER-002", "회원가입 필요");
+    SIGNUP_REQUIRED(HttpStatus.OK, "MEMBER-002", "회원가입 필요"),
+    SIGNUP_SUCCESS(HttpStatus.OK, "MEMBER-003","회원가입 성공"),
+    FCM_TOKEN_SAVED(HttpStatus.OK, "MEMBER-004", "FCM 토큰 저장 완료");
 
     private final HttpStatus httpStatus;
     private final String code;
