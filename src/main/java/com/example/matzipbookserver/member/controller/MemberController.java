@@ -22,13 +22,13 @@ public class MemberController {
 
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentMember(@CurrentMember Member member) {
-        return ResponseEntity.ok(new MemberInfoResponse(member));
+        return SuccessResponse.of(MemberSuccessCode.MEMBER_INFO_SUCCESS, new MemberInfoResponse(member));
     }
 
 
     @PostMapping("/fcm")
     public ResponseEntity<?> saveFcmToken(@CurrentMember Member member, @RequestBody FcmTokenRequest request) {
         fcmTokenService.saveOrUpdate(member, request.fcmToken());
-        return ResponseEntity.ok(new SuccessResponse<>(MemberSuccessCode.FCM_TOKEN_SAVED,null));
+        return SuccessResponse.of(MemberSuccessCode.FCM_TOKEN_SAVED, null);
     }
 }
