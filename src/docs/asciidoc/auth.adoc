@@ -3,72 +3,148 @@
 :toclevels: 2
 :sectlinks:
 
-[[resources-post]]
+[[resources-auth]]
 == Authentication
 
-[[resources-post-create]]
-=== 로그인 시도
+
+[[resources-auth-kakao]]
+=== 카카오 로그인
+
+==== 로그인 성공
+
+===== HTTP request
+include::{snippets}/kakao-login-success/http-request.adoc[]
+
+===== request-body 설명
+include::{snippets}/kakao-login-success/request-fields.adoc[]
+
+===== HTTP response
+include::{snippets}/kakao-login-success/http-response.adoc[]
+
+===== response-body 설명
+include::{snippets}/kakao-login-success/response-fields.adoc[]
+
+==== 회원가입 필요
+
+===== HTTP request
+include::{snippets}/kakao-login-need-signup/http-request.adoc[]
+
+===== request-body 설명
+include::{snippets}/kakao-login-need-signup/request-fields.adoc[]
+
+===== HTTP response
+include::{snippets}/kakao-login-need-signup/http-response.adoc[]
+
+===== response-body 설명
+include::{snippets}/kakao-login-need-signup/response-fields.adoc[]
+
+
+[[resources-auth-apple]]
+=== 애플 로그인
+
+==== 로그인 성공
+
+===== HTTP request
+include::{snippets}/apple-login-success/http-request.adoc[]
+
+===== request-body 설명
+include::{snippets}/apple-login-success/request-fields.adoc[]
+
+===== HTTP response
+include::{snippets}/apple-login-success/http-response.adoc[]
+
+===== response-body 설명
+include::{snippets}/apple-login-success/response-fields.adoc[]
+
+==== 회원가입 필요
+
+===== HTTP request
+include::{snippets}/apple-login-need-signup/http-request.adoc[]
+
+===== request-body 설명
+include::{snippets}/apple-login-need-signup/request-fields.adoc[]
+
+===== HTTP response
+include::{snippets}/apple-login-need-signup/http-response.adoc[]
+
+===== response-body 설명
+include::{snippets}/apple-login-need-signup/response-fields.adoc[]
+
+==== 토큰 파싱 실패
+
+===== HTTP request
+include::{snippets}/apple-login-token-parse-failed/http-request.adoc[]
+
+===== HTTP response
+include::{snippets}/apple-login-token-parse-failed/http-response.adoc[]
+
+[[resources-auth-signup]]
+=== 회원가입
 
 ==== HTTP request
-
-include::{snippets}/auth-login/http-request.adoc[]
+include::{snippets}/signup-success/http-request.adoc[]
 
 ==== request-body 설명
-include::{snippets}/auth-login/request-fields.adoc[]
+include::{snippets}/signup-success/request-fields.adoc[]
 
 ==== HTTP response
-
-include::{snippets}/auth-login/http-response.adoc[]
+include::{snippets}/signup-success/http-response.adoc[]
 
 ==== response-body 설명
-include::{snippets}/auth-login/response-fields.adoc[]
+include::{snippets}/signup-success/response-fields.adoc[]
+
+=== 회원가입 중복 실패
+
+==== HTTP request
+include::{snippets}/signup-already-registered/http-request.adoc[]
+
+==== request-body 설명
+include::{snippets}/signup-already-registered/request-fields.adoc[]
+
+==== HTTP response
+include::{snippets}/signup-already-registered/http-response.adoc[]
 
 
 
+[[resources-auth-logout]]
 === 로그아웃
 
 ==== HTTP request
-
 include::{snippets}/auth-logout/http-request.adoc[]
 
 ==== request-body 설명
 include::{snippets}/auth-logout/request-fields.adoc[]
 
 ==== HTTP response
-
 include::{snippets}/auth-logout/http-response.adoc[]
 
 
-
-
-=== 토큰재발급
+[[resources-auth-reissue]]
+=== 토큰 재발급
 
 ==== HTTP request
-
 include::{snippets}/auth-reissue/http-request.adoc[]
 
 ==== request-body 설명
 include::{snippets}/auth-reissue/request-fields.adoc[]
 
 ==== HTTP response
-
 include::{snippets}/auth-reissue/http-response.adoc[]
 
 ==== response-body 설명
 include::{snippets}/auth-reissue/response-fields.adoc[]
 
 
+[[resources-auth-withdraw]]
 === 회원탈퇴
 
 ==== HTTP request
-
 include::{snippets}/auth-withdraw/http-request.adoc[]
 
 ==== request-header 설명
 include::{snippets}/auth-withdraw/request-headers.adoc[]
 
 ==== HTTP response
-
 include::{snippets}/auth-withdraw/http-response.adoc[]
 
 ==== response-body 설명

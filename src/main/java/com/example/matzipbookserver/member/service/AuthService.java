@@ -1,6 +1,7 @@
 package com.example.matzipbookserver.member.service;
 
 import com.example.matzipbookserver.global.exception.RestApiException;
+import com.example.matzipbookserver.global.jwt.JwtTokenProvider;
 import com.example.matzipbookserver.global.response.error.AuthErrorCode;
 import com.example.matzipbookserver.member.controller.dto.response.KakaoLoginResponse;
 import com.example.matzipbookserver.member.controller.dto.response.AppleLoginResponse;
@@ -59,7 +60,7 @@ public class AuthService {
 
         if(member.isPresent()){
             fcmTokenService.saveOrUpdate(member.get(), fcmToken);
-            String jwt = jwtTokenProvider.createAccessToken(member.get().getEmail());
+            String jwt = jwtTokenProvider.createAccessToken("kakao", providerId);
             return new KakaoLoginResponse(jwt, new KakaoLoginResponse.UserInfo(member.get().getId(), member.get().getEmail()));
         } else {
             return new SignupNeededResponse(email, providerId);
@@ -97,7 +98,7 @@ public class AuthService {
 
         if (member.isPresent()) {
             fcmTokenService.saveOrUpdate(member.get(), fcmToken);
-            String jwt = jwtTokenProvider.createAccessToken(member.get().getEmail());
+            String jwt = jwtTokenProvider.createAccessToken("apple",providerId);
             return new AppleLoginResponse(jwt, new AppleLoginResponse.UserInfo(member.get().getId(), member.get().getEmail()));
         } else {
             return new SignupNeededResponse(email, providerId);

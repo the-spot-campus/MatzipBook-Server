@@ -2,6 +2,7 @@ package com.example.matzipbookserver.member.controller;
 
 import com.example.matzipbookserver.global.exception.ApiExceptionHandler;
 import com.example.matzipbookserver.global.exception.RestApiException;
+import com.example.matzipbookserver.global.jwt.JwtTokenProvider;
 import com.example.matzipbookserver.global.response.error.AuthErrorCode;
 import com.example.matzipbookserver.member.controller.dto.request.AppleLoginRequest;
 import com.example.matzipbookserver.member.controller.dto.request.KakaoLoginRequest;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -32,6 +34,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -46,24 +49,20 @@ public class AuthControllerTest {
 
     private RestDocumentationResultHandler restDocs;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @Autowired private MockMvc mockMvc;
+    @Autowired private ObjectMapper objectMapper;
 
-    private MockMvc mockMvc;
-
-    private AuthService authService = Mockito.mock(AuthService.class);
-    private FcmTokenService fcmTokenService = Mockito.mock(FcmTokenService.class);
+    @MockBean
+    private AuthService authService;
+    @MockBean private FcmTokenService fcmTokenService;
+    @MockBean private JwtTokenProvider jwtTokenProvider;
 
     @BeforeEach
     void setup(RestDocumentationContextProvider restDocumentation) {
-
-        this.restDocs = document("{class-name}/{method-name}");
-        this.mockMvc = MockMvcBuilders
-                .standaloneSetup(new AuthController(authService, fcmTokenService))
-                .setControllerAdvice(new ApiExceptionHandler())
+        this.mockMvc = MockMvcBuilders.webAppContextSetup((WebApplicationContext) context)
                 .apply(documentationConfiguration(restDocumentation))
+                .alwaysDo(document("{class-name}/{method-name}"))
                 .alwaysDo(print())
-                .alwaysDo(restDocs)
                 .build();
     }
 
@@ -93,10 +92,23 @@ public class AuthControllerTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value("로그인 성공"))
+                .andExpect(jsonPath("$.code").value("MEMBER-001"))
                 .andExpect(jsonPath("$.result.jwtToken").value("fake-jwt-token"))
                 .andExpect(jsonPath("$.result.user.email").value("test@email.com"))
-                .andDo(document("kakao-login-success"));
+                .andDo(document("kakao-login-success",
+                        requestFields(
+                                fieldWithPath("code").description("카카오 인가 코드"),
+                                fieldWithPath("fcmToken").description("FCM 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("code").description("응답 코드"),
+                                fieldWithPath("message").description("응답 메시지"),
+                                fieldWithPath("result.jwtToken").description("JWT 토큰"),
+                                fieldWithPath("result.user.id").description("사용자 ID"),
+                                fieldWithPath("result.user.email").description("사용자 이메일")
+                        )
+                ));
+
 
     }
 
@@ -116,9 +128,21 @@ public class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value("회원가입 필요"))
+                .andExpect(jsonPath("$.code").value("MEMBER-002"))
                 .andExpect(jsonPath("$.result.email").value("test@email.com"))
-                .andDo(document("kakao-login-need-signup"));
+                .andDo(document("kakao-login-need-signup",
+                        requestFields(
+                                fieldWithPath("code").description("카카오 인가 코드"),
+                                fieldWithPath("fcmToken").description("FCM 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("code").description("응답 코드"),
+                                fieldWithPath("message").description("응답 메시지"),
+                                fieldWithPath("result.email").description("사용자 이메일"),
+                                fieldWithPath("result.providerId").description("소셜 제공자 식별자")
+                        )
+                ));
+
     }
 
 
@@ -136,10 +160,23 @@ public class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value("로그인 성공"))
+                .andExpect(jsonPath("$.code").value("MEMBER-001"))
                 .andExpect(jsonPath("$.result.jwtToken").value("fake-jwt-token"))
                 .andExpect(jsonPath("$.result.user.email").value("test@email.com"))
-                .andDo(document("apple-login-success"));
+                .andDo(document("apple-login-success",
+                        requestFields(
+                                fieldWithPath("code").description("애플 인가 코드"),
+                                fieldWithPath("fcmToken").description("FCM 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("code").description("응답 코드"),
+                                fieldWithPath("message").description("응답 메시지"),
+                                fieldWithPath("result.jwtToken").description("JWT 토큰"),
+                                fieldWithPath("result.user.id").description("사용자 ID"),
+                                fieldWithPath("result.user.email").description("사용자 이메일")
+                        )
+                ));
+
     }
 
     @Test
@@ -159,10 +196,22 @@ public class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value("회원가입 필요"))
+                .andExpect(jsonPath("$.code").value("MEMBER-002"))
                 .andExpect(jsonPath("$.result.email").value("test@email.com"))
                 .andDo(print())
-                .andDo(document("apple-login-need-signup"));
+                .andDo(document("apple-login-need-signup",
+                        requestFields(
+                                fieldWithPath("code").description("애플 인가 코드"),
+                                fieldWithPath("fcmToken").description("FCM 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("code").description("응답 코드"),
+                                fieldWithPath("message").description("응답 메시지"),
+                                fieldWithPath("result.email").description("사용자 이메일"),
+                                fieldWithPath("result.providerId").description("소셜 제공자 식별자")
+                        )
+                ));
+
     }
 
 
@@ -180,9 +229,18 @@ public class AuthControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isUnauthorized())
-                .andExpect(content().string(containsString("AUTH-006")))
-                .andDo(document("apple-login-token-parse-failed"))
-                .andDo(print());
+                .andExpect(content().string(containsString("AUTH-006")));
+//                .andDo(document("apple-login-token-parse-failed",
+//                        requestFields(
+//                                fieldWithPath("code").description("애플 인가 코드"),
+//                                fieldWithPath("fcmToken").description("FCM 토큰")
+//                        ),
+//                        responseFields(
+//                        fieldWithPath("code").description("에러 코드"),
+//                        fieldWithPath("message").description("에러 메시지")
+//                        )
+//                ));
+
     }
 
 
