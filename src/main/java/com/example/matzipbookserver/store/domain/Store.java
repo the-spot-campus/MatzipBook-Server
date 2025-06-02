@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -36,5 +39,11 @@ public class Store {
     private Double y; //위도
 
     private int voteCount = 0;
+
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL) //음식 카테고리
+    private List<StoreFoodCategory> storeFoodCategories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL) //분위기 카테고리
+    private List<StoreMoodCategory> storeMoodCategories = new ArrayList<>();
 
 }
