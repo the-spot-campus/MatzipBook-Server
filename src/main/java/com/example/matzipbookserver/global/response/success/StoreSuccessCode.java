@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum StoreSuccessCode implements SuccessCode {
 
-    OK("STORE_SEARCH_SUCCESS", HttpStatus.OK, "가게 상세 조회 성공");
+    OK("STORE_SEARCH_SUCCESS", HttpStatus.OK, "가게 조회 성공"),
+    ;
+
 
 
     private final String code;

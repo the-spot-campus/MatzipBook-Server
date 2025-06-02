@@ -2,6 +2,7 @@ package com.example.matzipbookserver.store.service;
 
 import com.example.matzipbookserver.global.exception.RestApiException;
 import com.example.matzipbookserver.global.response.error.StoreErrorCode;
+import com.example.matzipbookserver.store.controller.dto.StoreRankingResponseDto;
 import com.example.matzipbookserver.store.controller.dto.StoreResponseDto;
 import com.example.matzipbookserver.store.domain.Store;
 import com.example.matzipbookserver.store.domain.repository.StoreRepository;
@@ -9,6 +10,8 @@ import com.example.matzipbookserver.store.external.KakaoLocalClient;
 import com.example.matzipbookserver.store.external.dto.KakaoDocument;
 import com.example.matzipbookserver.store.external.dto.KakaoSearchResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -46,4 +49,16 @@ public class StoreService {
         storeRepository.save(newStore);
         return StoreResponseDto.from(newStore);
     }
+
+
+    public Page<StoreRankingResponseDto> getNearStoreRanking(double longitude, double latitude, int radius, Pageable pageable) {
+
+        double radiusKm = radius / 1000.0; //km로 변환
+
+        Page<Store> storePage = storeRepository.findNearByVoteCount(longitude, latitude, radiusKm, pageable);
+
+        return storePage.map(StoreRankingResponseDto::from);
+    }
+
+
 }

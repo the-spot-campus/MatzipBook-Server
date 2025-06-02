@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class KakaoFeignConfig {
 
-    @Value("${kakao.rest-api-key}")
+    @Value("${kakao.client-id}")
     private String kakaoApiKey;
 
     @Bean
