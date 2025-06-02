@@ -35,6 +35,7 @@ public class Store {
     private Double x; //경도
     private Double y; //위도
 
+    @Builder.Default
     private int voteCount = 0;
 
 }

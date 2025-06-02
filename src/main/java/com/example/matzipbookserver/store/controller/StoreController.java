@@ -21,7 +21,7 @@ public class StoreController {
             @RequestParam String storeName,
             @RequestParam double x,
             @RequestParam double y) {
-        return SuccessResponse.of(StoreSuccessCode.OK, storeService.getPlaceDetail(kakaoPlaceId, storeName, x, y));
+        return ResponseEntity.ok(SuccessResponse.of(StoreSuccessCode.OK, storeService.getPlaceDetail(kakaoPlaceId, storeName, x, y))) ;
     }
 
 }
