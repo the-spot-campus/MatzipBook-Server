@@ -2,6 +2,7 @@ package com.example.matzipbookserver.store.service;
 
 import com.example.matzipbookserver.global.exception.RestApiException;
 import com.example.matzipbookserver.global.response.error.StoreErrorCode;
+import com.example.matzipbookserver.store.controller.dto.StoreFilterResponseDto;
 import com.example.matzipbookserver.store.controller.dto.StoreResponseDto;
 import com.example.matzipbookserver.store.domain.Store;
 import com.example.matzipbookserver.store.domain.repository.StoreRepository;
@@ -11,7 +12,11 @@ import com.example.matzipbookserver.store.external.dto.KakaoSearchResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+
+import static com.example.matzipbookserver.store.domain.StoreFilterValues.VALID_FOODS;
+import static com.example.matzipbookserver.store.domain.StoreFilterValues.VALID_MOODS;
 
 @RequiredArgsConstructor
 @Service
@@ -45,5 +50,22 @@ public class StoreService {
                 .kakaoPlaceUrl(document.placeUrl()).build();
         storeRepository.save(newStore);
         return StoreResponseDto.from(newStore);
+    }
+
+    public List<StoreFilterResponseDto> getStoresByFilter(List<String> foods, List<String> moods) {
+        if (foods != null && !foods.stream().allMatch(VALID_FOODS::contains)) {
+            throw new RestApiException(StoreErrorCode.INVALID_FILTER_CONDITION);
+        }
+        if (moods != null && !moods.stream().allMatch(VALID_MOODS::contains)) {
+            throw new RestApiException(StoreErrorCode.INVALID_FILTER_CONDITION);
+        }
+        long foodCount = (foods != null) ? foods.size() : 0;
+        long moodCount = (moods != null) ? moods.size() : 0;
+
+        List<Store> stores = storeRepository.findByFilter(foods, moods, foodCount, moodCount);
+
+        return stores.stream()
+                .map(StoreFilterResponseDto::from)
+                .toList();
     }
 }
