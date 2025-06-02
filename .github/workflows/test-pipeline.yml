@@ -5,6 +5,7 @@ on:
     branches: [ dev ]
   pull_request:
     branches: [ dev ]
+  workflow_dispatch:
 
 jobs:
   test-deploy:
@@ -20,10 +21,12 @@ jobs:
           distribution: 'temurin'
 
       - name: Set up secret.yml
+        env:
+          APPLICATION_SECRET_CONTENT: ${{ secrets.APPLICATION_SECRET }}
         run: |
           cd ./src/main/resources
           touch ./application-secret.yml
-          echo "${{ secrets.APPLICATION_SECRET }}" > ./application-secret.yml
+          echo "$APPLICATION_SECRET_CONTENT" > ./application-secret.yml
           ls -a .
 
       - name: Grant execute permission for Gradle

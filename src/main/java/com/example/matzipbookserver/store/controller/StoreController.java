@@ -28,7 +28,6 @@ public class StoreController {
         return ResponseEntity.ok(SuccessResponse.of(StoreSuccessCode.OK, storeService.getPlaceDetail(kakaoPlaceId, storeName, x, y))) ;
     }
 
-
     @GetMapping("/ranking")
     public ResponseEntity<SuccessResponse<Page<StoreRankingResponseDto>>> getStoreRanking(
             @RequestParam double x,     //latitude 경도
@@ -41,7 +40,4 @@ public class StoreController {
         Page<StoreRankingResponseDto> ranking = storeService.getNearStoreRanking(x, y, minimumRadius, pageable);
         return ResponseEntity.ok(SuccessResponse.of(StoreSuccessCode.OK, ranking));
     }
-
-
-
 }

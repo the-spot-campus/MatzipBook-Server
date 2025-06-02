@@ -37,5 +37,4 @@ public class Store {
 
     @Builder.Default
     private int voteCount = 0;
-
 }
