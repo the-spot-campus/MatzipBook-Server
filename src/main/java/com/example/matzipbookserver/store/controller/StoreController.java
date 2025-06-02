@@ -2,11 +2,14 @@ package com.example.matzipbookserver.store.controller;
 
 import com.example.matzipbookserver.global.response.SuccessResponse;
 import com.example.matzipbookserver.global.response.success.StoreSuccessCode;
+import com.example.matzipbookserver.store.controller.dto.StoreFilterResponseDto;
 import com.example.matzipbookserver.store.controller.dto.StoreResponseDto;
 import com.example.matzipbookserver.store.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/store")
@@ -24,4 +27,12 @@ public class StoreController {
         return SuccessResponse.of(StoreSuccessCode.OK, storeService.getPlaceDetail(kakaoPlaceId, storeName, x, y));
     }
 
+    @GetMapping
+    public SuccessResponse<List<StoreFilterResponseDto>> getStoresByFilter(
+            @RequestParam(required = false) List<String> foods,
+            @RequestParam(required = false) List<String> moods
+    ) {
+        List<StoreFilterResponseDto> result = storeService.getStoresByFilter(foods, moods);
+        return SuccessResponse.of(StoreSuccessCode.FILTER_OK, result);
+    }
 }
