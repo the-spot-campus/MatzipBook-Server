@@ -1,6 +1,4 @@
 spring:
   profiles:
     active: dev
-  config:
-    import:
-      - classpath:application-secret.yml
+    include: secret
