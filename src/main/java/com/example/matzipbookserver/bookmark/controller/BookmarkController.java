@@ -1,5 +1,6 @@
 package com.example.matzipbookserver.bookmark.controller;
 
+
 import com.example.matzipbookserver.bookmark.controller.dto.request.BookmarkRequest;
 import com.example.matzipbookserver.bookmark.controller.dto.response.BookmarkInfo;
 import com.example.matzipbookserver.bookmark.controller.dto.response.BookmarkResponse;

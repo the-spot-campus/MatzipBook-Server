@@ -46,4 +46,5 @@ public class BookmarkService {
 
         bookmarkRepository.deleteByUserIdAndStoreId(request.userId(), request.storeId());
     }
+
 }
