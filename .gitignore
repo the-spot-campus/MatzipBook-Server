@@ -16,7 +16,7 @@ build/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
-
+resources/application.yml
 ### IntelliJ IDEA ###
 .idea
 *.iws
@@ -36,5 +36,5 @@ out/
 ### VS Code ###
 .vscode/
 
-### DS_Store ###
-.DS_Store
+src/main/resources/application.properties
+src/main/resources/application-secret.yml
