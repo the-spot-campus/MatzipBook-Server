@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class AwsService {
+public class S3Service {
     private final S3Uploader s3Uploader;
     private final MemberRepository memberRepository;
 
