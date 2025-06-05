@@ -13,5 +13,5 @@ import org.springframework.transaction.annotation.Transactional;
 @DataJpaTest
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface JpaTestWithInitData {
+public @interface WithInitDataJpaTest {
 }
