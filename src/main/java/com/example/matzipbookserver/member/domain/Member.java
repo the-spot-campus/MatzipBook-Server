@@ -18,4 +18,5 @@ public class Member {
     private String provider;
     private String providerId;
     private String email;
+    private String url;
 }

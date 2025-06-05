@@ -39,7 +39,6 @@ public class AuthController {
         }
     }
 
-
     @PostMapping("/apple/callback")
     public ResponseEntity<?> appleCallback(@RequestParam String code,
                                            @RequestParam(required = false) String id_token) {
@@ -57,6 +56,5 @@ public class AuthController {
             return SuccessResponse.of(MemberSuccessCode.SIGNUP_REQUIRED,response);
         }
     }
-
 
 }
