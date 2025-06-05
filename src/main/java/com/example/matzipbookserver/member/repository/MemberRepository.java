@@ -16,6 +16,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<String> findUrlById(Long memberId);
 
     @Modifying
-    @Query("update Member m set m.url = :newProfileImage where m.id = :memberId")
+    @Query("update Member m set m.profileImagePath = :newProfileImage where m.id = :memberId")
     void updateUrlById(@Param("newProfileImage") String key, @Param("memberId") Long memberId);
 }
