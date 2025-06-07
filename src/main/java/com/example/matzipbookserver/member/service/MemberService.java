@@ -4,6 +4,7 @@ import com.example.matzipbookserver.global.exception.RestApiException;
 import com.example.matzipbookserver.global.jwt.JwtTokenProvider;
 import com.example.matzipbookserver.member.controller.dto.request.SignupRequest;
 import com.example.matzipbookserver.member.controller.dto.response.SignupResponse;
+import com.example.matzipbookserver.member.domain.LoginMember;
 import com.example.matzipbookserver.member.domain.Member;
 import com.example.matzipbookserver.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,15 +33,14 @@ public class MemberService {
                 request.profileImagePath(),
                 request.university()
         );
-        Member saved = memberRepository.save(member);
 
-        String jwt = jwtTokenProvider.createAccessToken(saved.getProvider(), saved.getProviderId());
+        Member saved = memberRepository.save(member);
 
         return new SignupResponse(
                 saved.getId(),
                 saved.getEmail(),
-                saved.getNickname(),
-                jwt
+                saved.getNickname()
         );
     }
+
 }

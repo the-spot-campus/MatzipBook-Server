@@ -64,6 +64,16 @@ public class AuthController {
         }
     }
 
+
+    @PostMapping("/reissue")
+    public SuccessResponse<AuthToken> reissue(@RequestBody AuthToken authToken) {
+        return SuccessResponse.of(
+                MemberSuccessCode.REISSUE_TOKEN_SUCCESS,
+                authService.reissue(authToken)
+        );
+    }
+
+
     @PostMapping("/signup")
     public SuccessResponse<SignupResponse> signup(@RequestBody SignupRequest request) {
         SignupResponse response = memberService.signup(request);

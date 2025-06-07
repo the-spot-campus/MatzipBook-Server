@@ -6,6 +6,5 @@ import lombok.Builder;
 public record SignupResponse (
         Long id,
         String email,
-        String nickname,
-        String jwtToken
+        String nickname
 ) {}
