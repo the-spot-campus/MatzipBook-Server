@@ -2,7 +2,7 @@ package com.example.matzipbookserver.member.controller.dto.response;
 
 
 public record KakaoLoginResponse (
-    String jwtToken,
+    AuthToken authToken,
     UserInfo user
 ) implements LoginResponse{
     public record UserInfo(
