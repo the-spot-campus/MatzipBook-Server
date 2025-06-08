@@ -14,7 +14,7 @@ public class SuccessResponse<T> extends ResponseEntity<CustomResponseDto<T>> {
         return new SuccessResponse<>(successCode, result);
     }
 
-    public static SuccessResponse of(final SuccessCode successCode) {
-        return new SuccessResponse(successCode, successCode.getMessage());
+    public static SuccessResponse<String> of(final SuccessCode successCode) {
+        return new SuccessResponse<>(successCode, successCode.getMessage());
     }
 }
