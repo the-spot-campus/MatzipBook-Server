@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 public class AmazonS3Properties {
     @Value("${aws.s3.bucket}")
     private String bucket;
-    @Value("${cloud.aws.credentials.accessKey}")
+    @Value("${aws.credentials.accessKey}")
     private String accessKey;
-    @Value("${cloud.aws.credentials.secretKey}")
+    @Value("${aws.credentials.secretKey}")
     private String secretKey;
     @Value("${aws.region}")
     private String region;
