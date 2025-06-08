@@ -1,4 +1,4 @@
-package com.example.matzipbookserver.aws.controller.dto.reqeust;
+package com.example.matzipbookserver.s3.controller.dto.reqeust;
 
 import lombok.Builder;
 

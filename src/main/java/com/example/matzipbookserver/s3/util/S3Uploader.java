@@ -1,12 +1,12 @@
-package com.example.matzipbookserver.aws.util;
+package com.example.matzipbookserver.uploader.util;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.example.matzipbookserver.aws.controller.dto.reqeust.OldFileNameRequest;
-import com.example.matzipbookserver.aws.controller.dto.reqeust.S3SingleUploadRequest;
-import com.example.matzipbookserver.aws.controller.dto.response.S3File;
+import com.example.matzipbookserver.uploader.controller.dto.reqeust.OldFileNameRequest;
+import com.example.matzipbookserver.uploader.controller.dto.reqeust.S3SingleUploadRequest;
+import com.example.matzipbookserver.uploader.controller.dto.response.S3File;
 import com.example.matzipbookserver.global.exception.RestApiException;
 import com.example.matzipbookserver.global.properties.AmazonS3Properties;
 import com.example.matzipbookserver.global.response.error.S3ErrorCode;
@@ -25,7 +25,13 @@ public class S3Uploader {
     private static final long MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10 MB
 
     public S3File singleUpload(S3SingleUploadRequest s3SingleUploadRequest){
+        if(hasNoImage(s3SingleUploadRequest)) return null;
+
         return uploadToS3(s3SingleUploadRequest);
+    }
+
+    private boolean hasNoImage(S3SingleUploadRequest s3SingleUploadRequest) {
+        return s3SingleUploadRequest.profileImage() == null;
     }
 
     private S3File uploadToS3(S3SingleUploadRequest s3SingleUploadRequest) {
@@ -58,7 +64,7 @@ public class S3Uploader {
                 ? "." + contentType.split("/")[1]
                 : ".png";
         String uuidName = UUID.randomUUID() + fileExtension;
-        return String.format("profile/%s%s", uuidName);
+        return String.format("profile/%s", uuidName);
     }
 
     private void checkFileLimit(S3SingleUploadRequest s3SingleUploadRequest) {
