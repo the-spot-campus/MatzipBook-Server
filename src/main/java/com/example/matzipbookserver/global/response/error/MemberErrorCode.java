@@ -29,7 +29,7 @@ public enum MemberErrorCode implements ErrorCode {
     }
 
     @Override
-    public String getMessage() {
+    public String getErrorDescription() {
         return message;
     }
 

@@ -13,6 +13,5 @@ public enum S3ErrorCode implements ErrorCode {
 
     private final String developCode;
     private final HttpStatus httpStatus;
-    private final String message;
-
+    private final String errorDescription;
 }
