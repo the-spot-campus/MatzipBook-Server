@@ -1,6 +1,7 @@
 package com.example.matzipbookserver.member.repository;
 
 import com.example.matzipbookserver.member.domain.Member;
+import com.example.matzipbookserver.member.domain.MemberImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,9 +14,6 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByProviderAndProviderId(String provider, String providerId);
 
-    Optional<String> findUrlById(Long memberId);
-
-    @Modifying
-    @Query("update Member m set m.profileImagePath = :newProfileImage where m.id = :memberId")
-    void updateUrlById(@Param("newProfileImage") String key, @Param("memberId") Long memberId);
+    @Query("SELECT m.memberImage FROM Member m JOIN m.memberImage mi WHERE m.id = :id")
+    Optional<MemberImage> findMemberImageById(Long id);
 }
