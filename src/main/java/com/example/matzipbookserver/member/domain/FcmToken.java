@@ -1,8 +1,12 @@
 package com.example.matzipbookserver.member.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "fcmtoken")
 public class FcmToken {
 
     @Id
@@ -22,8 +26,4 @@ public class FcmToken {
     public void update(String newFcmToken) {
         this.fcmToken = newFcmToken;
     }
-
-    protected FcmToken() {} //JPA 기본 생성자
 }
-
-
