@@ -1,4 +1,4 @@
-package com.example.matzipbookserver;
+package com.example.matzipbookserver.global;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
@@ -21,7 +21,7 @@ public class DatabaseCleanUp implements InitializingBean {
     public void afterPropertiesSet() {
         tableNames = entityManager.getMetamodel().getEntities().stream()
                 .filter(e -> e.getJavaType().getAnnotation(Entity.class) != null)
-                .map(e -> e.getName())
+                .map(e -> e.getName().toLowerCase())
                 .toList();
     }
 
@@ -31,7 +31,7 @@ public class DatabaseCleanUp implements InitializingBean {
         entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY FALSE").executeUpdate();
 
         for (String tableName : tableNames) {
-            entityManager.createNativeQuery("TRUNCATE TABLE " + tableName).executeUpdate();
+            entityManager.createNativeQuery("TRUNCATE TABLE \"" + tableName + "\"").executeUpdate();
         }
 
         entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE").executeUpdate();

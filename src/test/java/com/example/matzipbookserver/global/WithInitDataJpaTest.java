@@ -1,4 +1,4 @@
-package com.example.matzipbookserver;
+package com.example.matzipbookserver.global;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,7 +9,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-@Sql("/data.sql")
 @DataJpaTest
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
