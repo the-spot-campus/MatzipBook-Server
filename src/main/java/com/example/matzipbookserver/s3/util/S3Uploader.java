@@ -1,12 +1,12 @@
-package com.example.matzipbookserver.uploader.util;
+package com.example.matzipbookserver.s3.util;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.example.matzipbookserver.uploader.controller.dto.reqeust.OldFileNameRequest;
-import com.example.matzipbookserver.uploader.controller.dto.reqeust.S3SingleUploadRequest;
-import com.example.matzipbookserver.uploader.controller.dto.response.S3File;
+import com.example.matzipbookserver.s3.controller.dto.reqeust.OldFileNameRequest;
+import com.example.matzipbookserver.s3.controller.dto.reqeust.S3SingleUploadRequest;
+import com.example.matzipbookserver.s3.controller.dto.response.S3File;
 import com.example.matzipbookserver.global.exception.RestApiException;
 import com.example.matzipbookserver.global.properties.AmazonS3Properties;
 import com.example.matzipbookserver.global.response.error.S3ErrorCode;
@@ -28,6 +28,15 @@ public class S3Uploader {
         if(hasNoImage(s3SingleUploadRequest)) return null;
 
         return uploadToS3(s3SingleUploadRequest);
+    }
+
+    public boolean deleteImage(OldFileNameRequest oldFileNameRequest) {
+        if (!amazonS3.doesObjectExist(amazonS3Properties.getBucket(), oldFileNameRequest.oldFileName())) {
+            throw new AmazonS3Exception("Object " + oldFileNameRequest.oldFileName() + " does not exist!");
+        }
+
+        amazonS3.deleteObject(amazonS3Properties.getBucket(), oldFileNameRequest.oldFileName());
+        return true;
     }
 
     private boolean hasNoImage(S3SingleUploadRequest s3SingleUploadRequest) {
@@ -58,27 +67,17 @@ public class S3Uploader {
         }
     }
 
-    private String generateUUIDFileName(S3SingleUploadRequest s3SingleUploadRequest) {
-        String contentType = s3SingleUploadRequest.profileImage().getContentType();
-        String fileExtension = contentType != null && contentType.contains("/")
-                ? "." + contentType.split("/")[1]
-                : ".png";
-        String uuidName = UUID.randomUUID() + fileExtension;
-        return String.format("profile/%s", uuidName);
-    }
-
     private void checkFileLimit(S3SingleUploadRequest s3SingleUploadRequest) {
         if (s3SingleUploadRequest.profileImage().getSize() > MAX_IMAGE_SIZE) {
             throw new RestApiException(S3ErrorCode.POST_IMAGE_ERROR);
         }
     }
 
-    public boolean delete(OldFileNameRequest oldFileNameRequest) {
-        if (!amazonS3.doesObjectExist(amazonS3Properties.getBucket(), oldFileNameRequest.oldFileName())) {
-            throw new AmazonS3Exception("Object " + oldFileNameRequest.oldFileName() + " does not exist!");
-        }
-
-        amazonS3.deleteObject(amazonS3Properties.getBucket(), oldFileNameRequest.oldFileName());
-        return true;
+    private String generateUUIDFileName(S3SingleUploadRequest s3SingleUploadRequest) {
+        String contentType = s3SingleUploadRequest.profileImage().getContentType();
+        String fileExtension = contentType != null && contentType.contains("/")
+                ? "." + contentType.split("/")[1]
+                : ".png";
+        return "profile/" + UUID.randomUUID() + fileExtension;
     }
 }
