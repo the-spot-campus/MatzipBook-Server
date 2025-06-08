@@ -1,12 +1,12 @@
-package com.example.matzipbookserver.uploader.service;
+package com.example.matzipbookserver.s3.service;
 
-import com.example.matzipbookserver.uploader.controller.dto.reqeust.DeleteProfileRequest;
-import com.example.matzipbookserver.uploader.controller.dto.reqeust.OldFileNameRequest;
-import com.example.matzipbookserver.uploader.controller.dto.reqeust.S3SingleUploadRequest;
-import com.example.matzipbookserver.uploader.controller.dto.reqeust.UploadProfileRequest;
-import com.example.matzipbookserver.uploader.controller.dto.response.S3File;
-import com.example.matzipbookserver.uploader.controller.dto.response.UploadProfileResponse;
-import com.example.matzipbookserver.uploader.util.S3Uploader;
+import com.example.matzipbookserver.s3.controller.dto.reqeust.DeleteProfileRequest;
+import com.example.matzipbookserver.s3.controller.dto.reqeust.OldFileNameRequest;
+import com.example.matzipbookserver.s3.controller.dto.reqeust.S3SingleUploadRequest;
+import com.example.matzipbookserver.s3.controller.dto.reqeust.UploadProfileRequest;
+import com.example.matzipbookserver.s3.controller.dto.response.S3File;
+import com.example.matzipbookserver.s3.controller.dto.response.UploadProfileResponse;
+import com.example.matzipbookserver.s3.util.S3Uploader;
 import com.example.matzipbookserver.global.exception.RestApiException;
 import com.example.matzipbookserver.global.response.error.S3ErrorCode;
 import com.example.matzipbookserver.member.domain.MemberImage;
@@ -23,11 +23,10 @@ public class S3Service {
 
     @Transactional
     public UploadProfileResponse uploadProfileImage(UploadProfileRequest request) {
-        if (request.profileImage() == null || request.profileImage().isEmpty())
-            throw new RestApiException(S3ErrorCode.POST_IMAGE_ERROR);
+        uploadFileIsNUllThrowsException(request);
 
         memberRepository.findMemberImageById(request.member().getId())
-                .ifPresent(image -> s3Uploader.delete(OldFileNameRequest.of(image.getFileName())));
+                .ifPresent(image -> s3Uploader.deleteImage(OldFileNameRequest.of(image.getFileName())));
 
         S3File s3File = s3Uploader.singleUpload(new S3SingleUploadRequest(request.profileImage()));
         request.member().changeImage(s3File);
@@ -37,12 +36,19 @@ public class S3Service {
     }
 
     @Transactional
-    public void deleteProfileImage(DeleteProfileRequest request) {
+    public boolean deleteProfileImage(DeleteProfileRequest request) {
         MemberImage profileImage = memberRepository.findMemberImageById(request.member().getId())
                 .orElseThrow(() -> new RestApiException(S3ErrorCode.DELETE_IMAGE_ERROR));
-        s3Uploader.delete(new OldFileNameRequest(profileImage.getFileName()));
+        s3Uploader.deleteImage(new OldFileNameRequest(profileImage.getFileName()));
 
         request.member().deleteImage();
         memberRepository.save(request.member());
+
+        return true;
+    }
+
+    private void uploadFileIsNUllThrowsException(UploadProfileRequest request) {
+        if (request.profileImage() == null || request.profileImage().isEmpty())
+            throw new RestApiException(S3ErrorCode.POST_IMAGE_ERROR);
     }
 }
