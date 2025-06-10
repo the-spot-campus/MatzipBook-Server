@@ -11,6 +11,7 @@ import com.example.matzipbookserver.global.exception.RestApiException;
 import com.example.matzipbookserver.global.response.error.S3ErrorCode;
 import com.example.matzipbookserver.member.domain.MemberImage;
 import com.example.matzipbookserver.member.repository.MemberRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,7 @@ public class S3Service {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public UploadProfileResponse uploadProfileImage(UploadProfileRequest request) {
+    public UploadProfileResponse uploadProfileImage(@Valid UploadProfileRequest request) {
         uploadFileIsNUllThrowsException(request);
 
         memberRepository.findMemberImageById(request.member().getId())

@@ -23,7 +23,7 @@ public class MemberService {
     private final S3Uploader s3Uploader;
 
     public SignUpResponse signup(SignUpRequest request, MultipartFile imageFile) {
-        memberRepository.findByProviderAndProviderId(request.provider(), request.providerId())
+        memberRepository.findByProviderAndProviderId(request.getProvider(), request.getProviderId())
                 .ifPresent(member -> {
                     throw new RestApiException(MemberErrorCode.ALREADY_REGISTERED);
                 });

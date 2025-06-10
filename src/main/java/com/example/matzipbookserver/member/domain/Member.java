@@ -50,13 +50,13 @@ public class Member {
 
     public static Member from(SignUpRequest request, MemberImage profileImage) {
         return Member.builder()
-                .provider(request.provider())
-                .providerId(request.providerId())
-                .email(request.email())
-                .nickname(request.nickname())
-                .birth(request.birth())
-                .gender(request.gender())
-                .university(request.university())
+                .provider(request.getProvider())
+                .providerId(request.getProviderId())
+                .email(request.getEmail())
+                .nickname(request.getNickname())
+                .birth(request.getBirth())
+                .gender(request.getGender())
+                .university(request.getUniversity())
                 .memberImage(profileImage)
                 .createdAt(LocalDateTime.now())
                 .build();
