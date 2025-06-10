@@ -1,5 +1,7 @@
-package com.example.matzipbookserver.global.exception;
+package com.example.matzipbookserver.global.exception.handler;
 
+import com.example.matzipbookserver.global.exception.ExceptionResponseBody;
+import com.example.matzipbookserver.global.exception.RestApiException;
 import com.example.matzipbookserver.global.response.error.ErrorCode;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
@@ -7,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-@Order(value = Integer.MIN_VALUE)
+@Order(value = Integer.MIN_VALUE + 1)
 public class ApiExceptionHandler {
     @ExceptionHandler(RestApiException.class)
     public ResponseEntity<ExceptionResponseBody> businessExceptionHandler(final RestApiException apiException) {
