@@ -7,12 +7,14 @@ import com.example.matzipbookserver.member.controller.AuthController;
 import com.example.matzipbookserver.member.controller.MemberController;
 import com.example.matzipbookserver.member.domain.Member;
 import com.example.matzipbookserver.s3.controller.S3Controller;
+import com.example.matzipbookserver.s3.service.S3Service;
 import com.example.matzipbookserver.store.controller.StoreController;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,12 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @ActiveProfiles({"test", "secret"})
 public abstract class BaseRestDocsTest {
 
-    @SpyBean protected AuthController authController;
-    @SpyBean protected MemberController memberController;
-    @SpyBean protected S3Controller s3Controller;
-    @SpyBean protected StoreController storeController;
-    @SpyBean protected BookmarkController bookmarkController;
-
+    @MockBean protected S3Service s3Service;
     @Autowired protected MockMvc mockMvc;
     @Autowired protected DummyGenerator dummyGenerator;
     @Autowired private DatabaseCleanUp databaseCleanUp;

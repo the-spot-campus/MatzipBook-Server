@@ -25,30 +25,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class S3RestDocsTest extends BaseRestDocsTest {
 
     @Test
-    @DisplayName("s3 프로필 이미지 업로드")
+    @DisplayName("s3 프로필 이미지 업로드 성공")
     void signUpSuccess() throws Exception {
         // given
         MockMultipartFile multipartFile = dummyGenerator.createMockMultipartFile();
-        final SuccessResponse<?> response = SuccessResponse.of(
-                S3SuccessCode.PROFILE_UPLOAD_SUCCESS, new UploadProfileResponse("test_url"));
 
-        doReturn(response).when(s3Controller).uploadProfileImage(any(), any());
+        UploadProfileResponse mockResponse = new UploadProfileResponse("test_url");
+        doReturn(mockResponse).when(s3Service)
+                .uploadProfileImage(any());
 
-        // When and Then
+        // when & then
         mockMvc.perform(multipart("/api/profile")
                         .file(multipartFile)
                         .header("Authorization", GIVEN_ACCESS_TOKEN)
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-                )
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk())
                 .andDo(document("profile/upload",
-                        requestParts(
-                                partWithName("profileImage").description("프로필 이미지 파일")
-                        ),
-                        responseFields(
-                                CommonSuccessResponseField.createCommonResponseFields()
-                        ).andWithPrefix("result.",
-                                fieldWithPath("path").description("이미지 경로"))
+                        requestParts(partWithName("profileImage").description("프로필 이미지 파일")),
+                        responseFields(CommonSuccessResponseField.createCommonResponseFields())
+                                .andWithPrefix("result.",
+                                        fieldWithPath("path").description("이미지 경로"))
                 ));
     }
 
@@ -57,24 +53,19 @@ class S3RestDocsTest extends BaseRestDocsTest {
     void signUpFail() throws Exception {
         // given
         MockMultipartFile multipartFile = dummyGenerator.createMockMultipartFile();
-        doThrow(new RestApiException(S3ErrorCode.PROFILE_UPLOAD_FAILED))
-                .when(s3Controller).uploadProfileImage(any(), any());
 
-        // When and Then
+        doThrow(new RestApiException(S3ErrorCode.PROFILE_UPLOAD_FAILED))
+                .when(s3Service).uploadProfileImage(any());
+
+        // when & then
         mockMvc.perform(multipart("/api/profile")
                         .file(multipartFile)
                         .header("Authorization", GIVEN_ACCESS_TOKEN)
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-                )
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isInternalServerError())
                 .andDo(document("profile/upload-fail",
-                        requestParts(
-                                partWithName("profileImage").description("프로필 이미지 파일")
-                        ),
-                        responseFields(
-                                CommonErrorResponseField.createCommonErrorResponseFields()
-                        )
-                ));
+                        requestParts(partWithName("profileImage").description("프로필 이미지 파일")),
+                        responseFields(CommonErrorResponseField.createCommonErrorResponseFields())));
     }
 
     @Test
@@ -84,7 +75,7 @@ class S3RestDocsTest extends BaseRestDocsTest {
         final SuccessResponse<String> response = SuccessResponse.of(
                 S3SuccessCode.PROFILE_DELETED_SUCCESS, "프로필 이미지를 성공적으로 삭제하였습니다.");
 
-        doReturn(response).when(s3Controller).deleteProfileImage(any());
+        doReturn(true).when(s3Service).deleteProfileImage(any());
 
         // When and Then
         mockMvc.perform(delete("/api/profile")
@@ -104,7 +95,7 @@ class S3RestDocsTest extends BaseRestDocsTest {
     void deleteProfileImageFail() throws Exception {
         // given
         doThrow(new RestApiException(S3ErrorCode.DELETE_IMAGE_ERROR))
-                .when(s3Controller).deleteProfileImage(any());
+                .when(s3Service).deleteProfileImage(any());
 
         // When and Then
         mockMvc.perform(delete("/api/profile")
