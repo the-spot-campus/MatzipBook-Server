@@ -9,7 +9,7 @@ import com.example.matzipbookserver.s3.controller.dto.reqeust.DeleteProfileReque
 import com.example.matzipbookserver.s3.controller.dto.reqeust.UploadProfileRequest;
 import com.example.matzipbookserver.s3.controller.dto.response.UploadProfileResponse;
 import com.example.matzipbookserver.s3.service.S3Service;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api")
 @Validated
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class S3Controller {
     private final S3Service S3Service;
 

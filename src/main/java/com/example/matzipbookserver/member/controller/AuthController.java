@@ -13,6 +13,7 @@ import com.example.matzipbookserver.member.domain.Member;
 import com.example.matzipbookserver.member.service.AuthService;
 import com.example.matzipbookserver.member.service.FcmTokenService;
 import com.example.matzipbookserver.member.service.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +28,7 @@ public class AuthController {
     private final MemberService memberService;
 
     @PostMapping("/login/kakao")
-    public SuccessResponse<? extends LoginResponse> kakaoLogin(@RequestBody KakaoLoginRequest request) {
+    public SuccessResponse<? extends LoginResponse> kakaoLogin(@Valid @RequestBody KakaoLoginRequest request) {
         LoginResponse response = authService.kakaoLogin(request.code(), request.fcmToken());
 
         if(response instanceof KakaoLoginResponse) {
