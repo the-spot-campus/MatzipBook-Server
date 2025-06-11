@@ -1,0 +1,72 @@
+ifndef::snippets[]
+:snippets: ../../build/generated-snippets
+endif::[]
+
+= Spring REST Docs
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+
+[[s3-upload-success]]
+== 이미지 업로드 성공
+
+===== HTTP request
+include::{snippets}/s3/upload-success/curl-request.adoc[]
+include::{snippets}/s3/upload-success/http-request.adoc[]
+include::{snippets}/s3/upload-success/httpie-request.adoc[]
+include::{snippets}/s3/upload-success/request-body.adoc[]
+include::{snippets}/s3/upload-success/request-parts.adoc[]
+
+==== HTTP Response
+include::{snippets}/s3/upload-success/response-body.adoc[]
+include::{snippets}/s3/upload-success/response-fields.adoc[]
+include::{snippets}/s3/upload-success/http-response.adoc[]
+
+
+[[s3-upload-fail]]
+== 이미지 업로드 실패
+
+===== HTTP request
+include::{snippets}/s3/upload-fail/curl-request.adoc[]
+include::{snippets}/s3/upload-fail/http-request.adoc[]
+include::{snippets}/s3/upload-fail/httpie-request.adoc[]
+include::{snippets}/s3/upload-fail/request-body.adoc[]
+include::{snippets}/s3/upload-fail/request-parts.adoc[]
+
+==== HTTP Response
+include::{snippets}/s3/upload-fail/response-body.adoc[]
+include::{snippets}/s3/upload-fail/response-fields.adoc[]
+include::{snippets}/s3/upload-fail/http-response.adoc[]
+
+[[s3-delete-success]]
+== 이미지 삭제 성공
+
+===== HTTP request
+include::{snippets}/s3/delete-success/curl-request.adoc[]
+include::{snippets}/s3/delete-success/http-request.adoc[]
+include::{snippets}/s3/delete-success/httpie-request.adoc[]
+include::{snippets}/s3/delete-success/request-body.adoc[]
+
+==== HTTP Response
+include::{snippets}/s3/delete-success/response-body.adoc[]
+include::{snippets}/s3/delete-success/response-fields.adoc[]
+include::{snippets}/s3/delete-success/http-response.adoc[]
+
+
+[[s3-delete-fail]]
+== 이미지 삭제 실패
+
+===== HTTP request
+include::{snippets}/s3/delete-fail/curl-request.adoc[]
+include::{snippets}/s3/delete-fail/http-request.adoc[]
+include::{snippets}/s3/delete-fail/httpie-request.adoc[]
+include::{snippets}/s3/delete-fail/request-body.adoc[]
+
+==== HTTP Response
+include::{snippets}/s3/delete-fail/response-body.adoc[]
+include::{snippets}/s3/delete-fail/response-fields.adoc[]
+include::{snippets}/s3/delete-fail/http-response.adoc[]
