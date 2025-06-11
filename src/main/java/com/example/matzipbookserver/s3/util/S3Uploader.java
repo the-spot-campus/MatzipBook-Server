@@ -6,10 +6,11 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.matzipbookserver.s3.controller.dto.reqeust.OldFileNameRequest;
 import com.example.matzipbookserver.s3.controller.dto.reqeust.S3SingleUploadRequest;
-import com.example.matzipbookserver.s3.controller.dto.response.S3File;
+import com.example.matzipbookserver.s3.controller.dto.response.S3FileResponse;
 import com.example.matzipbookserver.global.exception.RestApiException;
 import com.example.matzipbookserver.global.properties.AmazonS3Properties;
 import com.example.matzipbookserver.global.response.error.S3ErrorCode;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -24,13 +25,11 @@ public class S3Uploader {
 
     private static final long MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10 MB
 
-    public S3File singleUpload(S3SingleUploadRequest s3SingleUploadRequest){
-        if(hasNoImage(s3SingleUploadRequest)) return null;
-
+    public S3FileResponse singleUpload(@Valid S3SingleUploadRequest s3SingleUploadRequest){
         return uploadToS3(s3SingleUploadRequest);
     }
 
-    public boolean deleteImage(OldFileNameRequest oldFileNameRequest) {
+    public boolean deleteImage(@Valid OldFileNameRequest oldFileNameRequest) {
         if (!amazonS3.doesObjectExist(amazonS3Properties.getBucket(), oldFileNameRequest.oldFileName())) {
             throw new AmazonS3Exception("Object " + oldFileNameRequest.oldFileName() + " does not exist!");
         }
@@ -39,11 +38,7 @@ public class S3Uploader {
         return true;
     }
 
-    private boolean hasNoImage(S3SingleUploadRequest s3SingleUploadRequest) {
-        return s3SingleUploadRequest.profileImage() == null;
-    }
-
-    private S3File uploadToS3(S3SingleUploadRequest s3SingleUploadRequest) {
+    private S3FileResponse uploadToS3(@Valid S3SingleUploadRequest s3SingleUploadRequest) {
         checkFileLimit(s3SingleUploadRequest);
 
         String uuidName = generateUUIDFileName(s3SingleUploadRequest);
@@ -61,19 +56,19 @@ public class S3Uploader {
                     )
             );
 
-            return new S3File(uuidName, amazonS3.getUrl(amazonS3Properties.getBucket(), uuidName).toString());
+            return new S3FileResponse(uuidName, amazonS3.getUrl(amazonS3Properties.getBucket(), uuidName).toString());
         } catch (IOException e) {
             throw new RestApiException(S3ErrorCode.PROFILE_UPLOAD_FAILED);
         }
     }
 
-    private void checkFileLimit(S3SingleUploadRequest s3SingleUploadRequest) {
+    private void checkFileLimit(@Valid S3SingleUploadRequest s3SingleUploadRequest) {
         if (s3SingleUploadRequest.profileImage().getSize() > MAX_IMAGE_SIZE) {
             throw new RestApiException(S3ErrorCode.POST_IMAGE_ERROR);
         }
     }
 
-    private String generateUUIDFileName(S3SingleUploadRequest s3SingleUploadRequest) {
+    private String generateUUIDFileName(@Valid S3SingleUploadRequest s3SingleUploadRequest) {
         String contentType = s3SingleUploadRequest.profileImage().getContentType();
         String fileExtension = contentType != null && contentType.contains("/")
                 ? "." + contentType.split("/")[1]

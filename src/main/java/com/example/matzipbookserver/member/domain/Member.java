@@ -1,6 +1,6 @@
 package com.example.matzipbookserver.member.domain;
 
-import com.example.matzipbookserver.s3.controller.dto.response.S3File;
+import com.example.matzipbookserver.s3.controller.dto.response.S3FileResponse;
 import com.example.matzipbookserver.member.controller.dto.request.SignUpRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -62,7 +62,7 @@ public class Member {
                 .build();
     }
 
-    public void changeImage(S3File s3File) {
+    public void changeImage(S3FileResponse s3File) {
         this.memberImage = MemberImage.from(s3File);
     }
 

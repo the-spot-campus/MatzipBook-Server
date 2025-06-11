@@ -4,7 +4,7 @@ import com.example.matzipbookserver.s3.controller.dto.reqeust.DeleteProfileReque
 import com.example.matzipbookserver.s3.controller.dto.reqeust.OldFileNameRequest;
 import com.example.matzipbookserver.s3.controller.dto.reqeust.S3SingleUploadRequest;
 import com.example.matzipbookserver.s3.controller.dto.reqeust.UploadProfileRequest;
-import com.example.matzipbookserver.s3.controller.dto.response.S3File;
+import com.example.matzipbookserver.s3.controller.dto.response.S3FileResponse;
 import com.example.matzipbookserver.s3.controller.dto.response.UploadProfileResponse;
 import com.example.matzipbookserver.s3.util.S3Uploader;
 import com.example.matzipbookserver.global.exception.RestApiException;
@@ -26,12 +26,10 @@ public class S3Service {
 
     @Transactional
     public UploadProfileResponse uploadProfileImage(@Valid UploadProfileRequest request) {
-        uploadFileIsNUllThrowsException(request);
-
         memberRepository.findMemberImageById(request.member().getId())
                 .ifPresent(image -> s3Uploader.deleteImage(OldFileNameRequest.of(image.getFileName())));
 
-        S3File s3File = s3Uploader.singleUpload(new S3SingleUploadRequest(request.profileImage()));
+        S3FileResponse s3File = s3Uploader.singleUpload(new S3SingleUploadRequest(request.profileImage()));
         request.member().changeImage(s3File);
         memberRepository.save(request.member());
 
@@ -39,7 +37,7 @@ public class S3Service {
     }
 
     @Transactional
-    public boolean deleteProfileImage(DeleteProfileRequest request) {
+    public boolean deleteProfileImage(@Valid DeleteProfileRequest request) {
         MemberImage profileImage = memberRepository.findMemberImageById(request.member().getId())
                 .orElseThrow(() -> new RestApiException(S3ErrorCode.DELETE_IMAGE_ERROR));
         s3Uploader.deleteImage(new OldFileNameRequest(profileImage.getFileName()));
@@ -48,10 +46,5 @@ public class S3Service {
         memberRepository.save(request.member());
 
         return true;
-    }
-
-    private void uploadFileIsNUllThrowsException(UploadProfileRequest request) {
-        if (request.profileImage() == null || request.profileImage().isEmpty())
-            throw new RestApiException(S3ErrorCode.POST_IMAGE_ERROR);
     }
 }

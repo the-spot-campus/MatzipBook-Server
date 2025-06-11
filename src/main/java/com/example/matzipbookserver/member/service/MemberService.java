@@ -1,18 +1,18 @@
 package com.example.matzipbookserver.member.service;
 
-import com.example.matzipbookserver.s3.controller.dto.reqeust.S3SingleUploadRequest;
-import com.example.matzipbookserver.s3.controller.dto.response.S3File;
-import com.example.matzipbookserver.s3.util.S3Uploader;
 import com.example.matzipbookserver.global.exception.RestApiException;
 import com.example.matzipbookserver.global.jwt.JwtTokenProvider;
+import com.example.matzipbookserver.global.response.error.MemberErrorCode;
 import com.example.matzipbookserver.member.controller.dto.request.SignUpRequest;
 import com.example.matzipbookserver.member.controller.dto.response.SignUpResponse;
 import com.example.matzipbookserver.member.domain.Member;
 import com.example.matzipbookserver.member.domain.MemberImage;
 import com.example.matzipbookserver.member.repository.MemberRepository;
+import com.example.matzipbookserver.s3.controller.dto.reqeust.S3SingleUploadRequest;
+import com.example.matzipbookserver.s3.controller.dto.response.S3FileResponse;
+import com.example.matzipbookserver.s3.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.example.matzipbookserver.global.response.error.MemberErrorCode;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -28,13 +28,19 @@ public class MemberService {
                     throw new RestApiException(MemberErrorCode.ALREADY_REGISTERED);
                 });
 
-        S3File s3File = s3Uploader.singleUpload(S3SingleUploadRequest.of(imageFile));
-        MemberImage profileImage = MemberImage.from(s3File);
+        MemberImage profileImage = createMemberImageIfPresent(imageFile);
         Member member = Member.from(request, profileImage);
 
         Member saved = memberRepository.save(member);
         String jwt = jwtTokenProvider.createAccessToken(saved.getProvider(), saved.getProviderId());
 
         return SignUpResponse.from(saved, jwt);
+    }
+
+    private MemberImage createMemberImageIfPresent(MultipartFile imageFile) {
+        if (imageFile == null) return null;
+
+        S3FileResponse s3File = s3Uploader.singleUpload(S3SingleUploadRequest.of(imageFile));
+        return MemberImage.from(s3File);
     }
 }

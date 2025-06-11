@@ -1,6 +1,6 @@
 package com.example.matzipbookserver.member.domain;
 
-import com.example.matzipbookserver.s3.controller.dto.response.S3File;
+import com.example.matzipbookserver.s3.controller.dto.response.S3FileResponse;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,7 +16,7 @@ public class MemberImage {
     private String fileName;
     private String url;
 
-    public static MemberImage from(final S3File imageFile) {
+    public static MemberImage from(final S3FileResponse imageFile) {
         MemberImage memberImage = new MemberImage();
         memberImage.fileName = imageFile.fileName();
         memberImage.url = imageFile.fileURL();

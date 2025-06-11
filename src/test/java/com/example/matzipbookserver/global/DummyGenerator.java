@@ -1,6 +1,6 @@
 package com.example.matzipbookserver.global;
 
-import com.example.matzipbookserver.s3.controller.dto.response.S3File;
+import com.example.matzipbookserver.s3.controller.dto.response.S3FileResponse;
 import com.example.matzipbookserver.bookmark.domain.repository.BookmarkRepository;
 import com.example.matzipbookserver.global.jwt.JwtTokenProvider;
 import com.example.matzipbookserver.member.controller.dto.request.SignUpRequest;
@@ -62,7 +62,7 @@ public class DummyGenerator {
     }
 
     private MemberImage makeImage() {
-        return MemberImage.from(new S3File(GIVEN_FILE_NAME, GIVEN_FILE_URL));
+        return MemberImage.from(new S3FileResponse(GIVEN_FILE_NAME, GIVEN_FILE_URL));
     }
 
     private Member makeMember(String providerId, MemberImage memberImage) {
