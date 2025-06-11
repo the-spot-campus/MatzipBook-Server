@@ -40,7 +40,7 @@ class S3RestDocsTest extends BaseRestDocsTest {
                         .header("Authorization", GIVEN_ACCESS_TOKEN)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk())
-                .andDo(document("profile/upload",
+                .andDo(document("s3/upload-success",
                         requestParts(partWithName("profileImage").description("프로필 이미지 파일")),
                         responseFields(CommonSuccessResponseField.createCommonResponseFields())
                                 .andWithPrefix("result.",
@@ -63,7 +63,7 @@ class S3RestDocsTest extends BaseRestDocsTest {
                         .header("Authorization", GIVEN_ACCESS_TOKEN)
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isInternalServerError())
-                .andDo(document("profile/upload-fail",
+                .andDo(document("s3/upload-fail",
                         requestParts(partWithName("profileImage").description("프로필 이미지 파일")),
                         responseFields(CommonErrorResponseField.createCommonErrorResponseFields())));
     }
@@ -83,7 +83,7 @@ class S3RestDocsTest extends BaseRestDocsTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
-                .andDo(document("profile/delete",
+                .andDo(document("s3/delete-success",
                         responseFields(
                                 CommonSuccessResponseField.createCommonResponseFields()
                         )
@@ -103,7 +103,7 @@ class S3RestDocsTest extends BaseRestDocsTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isBadRequest())
-                .andDo(document("profile/delete-fail",
+                .andDo(document("s3/delete-fail",
                         responseFields(
                                 CommonErrorResponseField.createCommonErrorResponseFields()
                         )
