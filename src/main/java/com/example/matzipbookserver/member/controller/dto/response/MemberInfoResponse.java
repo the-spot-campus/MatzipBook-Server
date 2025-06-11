@@ -1,6 +1,7 @@
 package com.example.matzipbookserver.member.controller.dto.response;
 
 import com.example.matzipbookserver.member.domain.Member;
+import com.example.matzipbookserver.member.domain.MemberImage;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ public record MemberInfoResponse(
         String providerId,
         String birth,
         String gender,
-        String profileImagePath,
+        MemberImage memberImage,
         String university,
         LocalDateTime createdAt
 ) {
@@ -27,7 +28,7 @@ public record MemberInfoResponse(
                 .providerId(m.getProviderId())
                 .birth(m.getBirth())
                 .gender(m.getGender())
-                .profileImagePath(m.getProfileImagePath())
+                .memberImage(m.getMemberImage())
                 .university(m.getUniversity())
                 .createdAt(m.getCreatedAt())
                 .build();

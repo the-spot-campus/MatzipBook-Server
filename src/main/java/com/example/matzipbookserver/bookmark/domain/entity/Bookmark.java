@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name="bookmark")
-public class BookmarkEntity {
+@Table(name = "bookmark")
+public class Bookmark {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,7 +18,7 @@ public class BookmarkEntity {
     private Long storeId;
 
     @Builder
-    public BookmarkEntity(Long userId, Long storeId) {
+    public Bookmark(Long userId, Long storeId) {
         this.userId = userId;
         this.storeId = storeId;
     }

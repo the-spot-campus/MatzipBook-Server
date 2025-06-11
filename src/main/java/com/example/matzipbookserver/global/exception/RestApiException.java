@@ -1,7 +1,9 @@
 package com.example.matzipbookserver.global.exception;
 
 import com.example.matzipbookserver.global.response.error.ErrorCode;
+import lombok.Getter;
 
+@Getter
 public class RestApiException extends RuntimeException {
 
     private final ErrorCode errorCode;
@@ -10,7 +12,8 @@ public class RestApiException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
-    public ErrorCode getErrorCode() {
-        return errorCode;
+    public RestApiException(ErrorCode errorCode, String detailMessage) {
+        super(detailMessage);
+        this.errorCode = errorCode;
     }
 }

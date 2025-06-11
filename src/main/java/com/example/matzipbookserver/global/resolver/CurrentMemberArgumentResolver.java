@@ -15,7 +15,6 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 
-
 @Component
 @RequiredArgsConstructor
 public class CurrentMemberArgumentResolver implements HandlerMethodArgumentResolver {
@@ -39,9 +38,6 @@ public class CurrentMemberArgumentResolver implements HandlerMethodArgumentResol
 
         return jwtTokenProvider.getMemberFromToken(token);
     }
-
-
-
 
 
 }

@@ -54,8 +54,6 @@ public class AuthService {
         String email = userInfo.kakaoAccount().email();
         String providerId = String.valueOf(userInfo.id());
 
-
-
         Optional<Member> member = memberRepository.findByProviderAndProviderId("kakao",providerId);
 
         if(member.isPresent()){
@@ -90,11 +88,10 @@ public class AuthService {
             throw new RestApiException(AuthErrorCode.APPLE_EMAIL_NOT_PROVIDED);
         }
 
-
         String email = userInfo.email();
         String providerId = userInfo.sub();
 
-        Optional<Member> member = memberRepository.findByProviderAndProviderId("apple",providerId);
+        Optional<Member> member = memberRepository.findByProviderAndProviderId("apple", providerId);
 
         if (member.isPresent()) {
             fcmTokenService.saveOrUpdate(member.get(), fcmToken);

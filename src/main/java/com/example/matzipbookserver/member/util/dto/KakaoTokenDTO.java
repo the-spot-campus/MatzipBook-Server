@@ -20,4 +20,6 @@ public record KakaoTokenDTO (
 
     @JsonProperty("refresh_token_expires_in")
     int refreshTokenExpiresIn
-) {}
+) {
+
+}
